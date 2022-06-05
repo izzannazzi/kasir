@@ -1,8 +1,16 @@
 <?php
 
 require 'function.php';
-$h1 = mysqli_query($koneksi, "SELECT * FROM pesanan");
-$h2 = mysqli_num_rows($h1);
+
+if (isset($_GET['idp'])) {
+    $idp = $_GET['idp'];
+
+    $ambilnamapelanggan = mysqli_query($koneksi,"SELECT * FROM pesanan p, pelanggan pl WHERE p.id_pelanggan=pl.id_pelanggan AND p.id_pesanan='$idp'");
+    $np = mysqli_fetch_array($ambilnamapelanggan);
+    $namapel = $np["nama_pelanggan"];
+} else {
+    header("location:index.php");
+}
 
 ?>
 
@@ -67,12 +75,10 @@ $h2 = mysqli_num_rows($h1);
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Kelola Pesanan</h1>
+                        <h1 class="mt-4 ">Kelola Pesanan : <?= $idp;?></h1>
+                        <h4>Nama Pelanggan : <?= $namapel;?></h4>
                         <div class="row">
                             <div class="col-xl-3 col-md-6 mb-2">
-                                <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">Jumlah Pesanan  : <?= $h2; ?> </div>
-                                </div>
                                 <div>   
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
                                         Tambah Pesanan
@@ -90,43 +96,49 @@ $h2 = mysqli_num_rows($h1);
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
-                                        <tr>
-                                            <th>id Pesanan</th>
-                                            <th>Waktu Pemesanan</th>
-                                            <th>Nama Pelanggan</th>
+                                    <tr>
+                                            <th>No.</th>
+                                            <th>Nama Produk</th>
+                                            <th>Harga Satuan</th>
                                             <th>Jumlah</th>
+                                            <th>Sub-total</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
-                                        <tr>
-                                            <th>id Pesanan</th>
-                                            <th>Waktu Pemesanan</th>
-                                            <th>Nama Pelanggan</th>
+                                    <tr>
+                                            <th>No.</th>
+                                            <th>Nama Produk</th>
+                                            <th>Harga Satuan</th>
                                             <th>Jumlah</th>
+                                            <th>Sub-total</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
                                         <?php
-                                            $getpesanan = mysqli_query($koneksi, "SELECT * FROM pesanan p, pelanggan pl WHERE p.id_pelanggan=pl.id_pelanggan");
+                                            $get = mysqli_query($koneksi, "SELECT * FROM detail_pesanan p, produk pr WHERE p.id_produk=pl.id_produk");
                                         
-                                            while ($p=mysqli_fetch_array($getpesanan)) {
-                                                $id_pesanan = $p["id_pesanan"];
-                                                $tanggal = $p["tgl_pesanan"];
-                                                $nama_pelanggan = $p["nama_pelanggan"];
-                                                $alamat = $p["alamat"];
+                                            $i=1;
 
-                                            $hitungjumlah = mysqli_query($koneksi, "SELECT * FROM detail_pesanan WHERE id_pesanan = '$id_pesanan'");
-                                            $jumlah = mysqli_num_rows($hitungjumlah);
+                                            while ($p=mysqli_fetch_array($get)) {
+                                                $qty = $p['qty'];
+                                                $harga = $p['harga'];
+                                                $nama_produk = $p['nama_produk'];
+                                                $subtotal = $qty * $harga
                                         ?>
-                                        <tr>
-                                            <td><?= $id_pesanan ?></td>
-                                            <td><?= $tanggal ?></td>
-                                            <td><?= $nama_pelanggan ?> - <?= $alamat; ?></td>
-                                            <td><?= $jumlah ?></td>
-                                            <td> <a href="view.php?idp=<?=$id_pesanan;?>" class="btn btn-primary" target="blank"> Tampilkan</a> | Hapus</td>
+                                           
+                                           <tr>
+                                    
+                                           <tr>
+                                            <td><?= $i++;?></td>
+                                            <td><?= $nama_produk ?></td>
+                                            <td>Rp. <?= number_format($harga) ?>,-</td>
+                                            <td><?= number_format($qty) ?></td>
+                                            <td>Rp. <?= number_format($subtotal) ?>,-</td>
+                                            <td> <a href="view.php?idp=<?=$id_pesanan;?>" class="btn btn-primary" target="blank"> Tampilkan </a> | Delete </td>
                                         </tr>
+                                            
                                     <?php } ?>
                                     </tbody>
                                 </table>
@@ -172,29 +184,32 @@ $h2 = mysqli_num_rows($h1);
           <form method="POST" action="" enctype="multipart/form-data">
           <div class="modal-body">
             <div class="">
-                <div class="">Pilih Pelanggan</div>
-                <select name="id_pelanggan" class="form-control mt-2">
+                <div class="">Pilih Barang</div>
+                <select name="id_produk" class="form-control mt-2">
                 <?php
-                    $getpelanggan = mysqli_query($koneksi, "SELECT * FROM pelanggan");
+                    $getproduk = mysqli_query($koneksi, "SELECT * FROM produk WHERE id_produk NOT IN (SELECT id_produk FROM detail_pesanan WHERE id_pesanan = '$idp')");
 
-                    while ($plg = mysqli_fetch_array($getpelanggan)) {
-                        $id_pelanggan = $plg["id_pelanggan"];
-                        $nama_pelanggan = $plg["nama_pelanggan"];
-                        $alamat = $plg["alamat"];
+                    while ($pr = mysqli_fetch_array($getproduk)) {
+                        $id_produk = $pr['id_produk'];
+                        $nama_produk = $pr['nama_produk'];
+                        $stock = $pr['stock'];
+                        $deskripsi = $pr['deskripsi'];
                     ?>
-                    <option value="<?= $id_pelanggan ;?>"> <?= $nama_pelanggan; ?> - <?= $alamat; ?>
+                   <option value="<?= $id_produk ;?>"> <?= $nama_produk; ?> - <?= $deskripsi; ?>
                         
                     </option>
                     <?php
                     }
                     ?>
+                    <input type="number" name="qty" class="form-control mt-2" placeholder="quantity" min="1" required>
+                    <input type="hidden" name="idp" value="<?= $idp; ?>">
                 </select>
             </div>
           </div>
 
           <!-- Modal footer -->
           <div class="modal-footer">
-            <button type="submit" class="btn btn-success" name="tambahpesanan">Tambah</button>
+            <button type="submit" class="btn btn-success" name="addproduk">Tambah</button>
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
           </div>
           </form>

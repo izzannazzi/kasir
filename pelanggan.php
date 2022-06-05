@@ -1,10 +1,11 @@
 <?php
 
 require 'function.php';
-$barang = mysqli_query($koneksi, "SELECT * FROM produk");
-$h2 = mysqli_num_rows($barang);
-?>
+$pelanggan = mysqli_query($koneksi, "SELECT * FROM pelanggan");
+$h2 = mysqli_num_rows($pelanggan);
 
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +15,7 @@ $h2 = mysqli_num_rows($barang);
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard</title>
+        <title>Kelola Pelanggan</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -66,57 +67,55 @@ $h2 = mysqli_num_rows($barang);
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Stock Barang</h1>
-                        <ol class="breadcrumb mb-4">
-                            
-                        </ol>
-                        <div class="row">       
-                            <div class="col-xl-3 col-md-6">
+                        <h1 class="mt-4">Kelola Pelanggan</h1>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-2">
                                 <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">Jumlah Barang  : <?= $h2 ;?></div>
+                                    <div class="card-body">Jumlah Pelanggan  : <?= $h2 ;?></div>
                                 </div>
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-    Tambah Barang
-  </button>
-                                <div class="container mt-3">
-</div>
-
+                                <div>   
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                                        Tambah pelanggan
+                                    </button>
+                                </div>
                             </div>
-                            
-                        
-                            <div class="card mb-4">
+                        </div>
+                        <div class="row">
+                        </div>
+                        <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Data Stock Barang
+                                Data Pelanggan
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Number</th>
-                                            <th>Nama Produk</th>
-                                            <th>Deskripsi</th>
-                                            <th>Gambar</th>
-                                            <th>Harga</th>
-                                            <th>Stock</th>
-                                            
+                                            <th>No</th>
+                                            <th>Nama Pelanggan</th>
+                                            <th>No. Telepon</th>
+                                            <th>Alamat</th>
                                         </tr>
                                     </thead>
-                                    
+                                    <tfoot>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Pelanggan</th>
+                                            <th>No. Telepon</th>
+                                            <th>Alamat</th>
+                                        </tr>
+                                    </tfoot>
                                     <tbody>
-                                        <?php $i = 1; ?>
-                                        <?php foreach($barang as $brg): ?>
+                                        <?php $i=1; ?>
+                                        <?php foreach($pelanggan as $plg): ?>
                                         <tr>
                                             <td><?= $i; ?></td>
-                                            <td><?= $brg['nama_produk']; ?></td>
-                                            <td><?= $brg['deskripsi']; ?></td>
-                                            <td><img height="120px" align="middle" src="image/<?= $brg['gambar']; ?>"></td>
-                                            <td>Rp. <?= number_format($brg['harga']); ?></td>
-                                            <td><?= $brg['stock']; ?></td>
-                                            
+                                            <td><?= $plg['nama_pelanggan']; ?></td>
+                                            <td><?= $plg['notelp']; ?></td>
+                                            <td><?= $plg['alamat']; ?></td>
                                         </tr>
-                                       <?php $i++ ; ?>
-                                       <?php endforeach; ?>
+                                        <?php $i++; ?>
+                                        <?php endforeach; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -126,8 +125,12 @@ $h2 = mysqli_num_rows($barang);
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Tauhid Izzan 2022</div>
-                           
+                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
                         </div>
                     </div>
                 </footer>
@@ -141,35 +144,37 @@ $h2 = mysqli_num_rows($barang);
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
+
+    <!-- The Modal -->
     <div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
+      <div class="modal-dialog">
+        <div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Data Tambah Barang</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Tambahkan Pelanggan</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <!-- Modal body -->
+          <form method="POST" action="" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="">
+                <input type="text" name="nama_pelanggan" class="form-control" placeholder="Nama">
+                <input type="text" name="notelp" class="form-control mt-2" placeholder="Nomor Telepon">
+                <input type="text" name="alamat" class="form-control mt-2" placeholder="Alamat">
+            </div>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" name="tambahpelanggan">Tambah</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+          </div>
+          </form>
+
+        </div>
       </div>
-
-      <form method="POST">
-
-      <!-- Modal body -->
-      <div class="modal-body">
-        <input type="text" name="nama_produk" class="form-control mt-3" placeholder="nama produk">
-        <input type="text" name="deskripsi" class="form-control mt-3" placeholder="deskripsi produk">
-        <input type="number" name="harga" class="form-control mt-3" placeholder="harga">
-        <input type="number" name="stock" class="form-control mt-3" placeholder="stock"> 
     </div>
 
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-success" name="tambahproduk">Simpan</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
-      </div>
-
-      </form>
-
-    </div>
-  </div>
-</div>
 </html>

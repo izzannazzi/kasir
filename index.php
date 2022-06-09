@@ -50,6 +50,7 @@ $h2 = mysqli_num_rows($h1);
                             </a>
                             <a class="nav-link" href="pelanggan.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                
                                 Kelola Pelanggan
                             </a>
 
@@ -126,7 +127,10 @@ $h2 = mysqli_num_rows($h1);
                                             <td><?= $tanggal ?></td>
                                             <td><?= $nama_pelanggan ?> - <?= $alamat; ?></td>
                                             <td><?= $jumlah ?></td>
-                                            <td> <a href="view.php?idp=<?=$id_pesanan;?>" class="btn btn-primary" target="blank"> Tampilkan</a> | Hapus</td>
+                                            <td> 
+                                                <a href="view.php?idp=<?=$id_pesanan;?>" class="btn btn-primary" target="blank"> Tampilkan</a>
+                                                <a href="hapus.php?idp=<?=$id_pesanan;?>" class="btn btn-danger"> Hapus</a>    
+                                            </td>
                                         </tr>
                                     <?php } ?>
                                     </tbody>
@@ -138,12 +142,8 @@ $h2 = mysqli_num_rows($h1);
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                            <div>
-                                <a href="#">Privacy Policy</a>
-                                &middot;
-                                <a href="#">Terms &amp; Conditions</a>
-                            </div>
+                            <div class="text-muted">Copyright &copy; Tauhid Izzan A 2022</div>
+                            
                         </div>
                     </div>
                 </footer>
